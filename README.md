@@ -1,4 +1,6 @@
-# Glob
+# glob-always-follow
+
+A fork of glob with follow set to enable.
 
 Match files using the patterns the shell uses.
 
@@ -190,7 +192,6 @@ paths found.
                          full resolved UNC maths, eg instead of 'C:\foo\bar', it
                          will expand to '//?/C:/foo/bar'.
 
-  -f --follow            Follow symlinked directories when expanding '**'
   -R --realpath          Call 'fs.realpath' on all of the results. In the case
                          of an entry that cannot be resolved, the entry is
                          omitted. This incurs a slight performance penalty, of
@@ -509,7 +510,7 @@ share the previously loaded cache.
 - `nodir` Do not match directories, only files. (Note: to match
   _only_ directories, put a `/` at the end of the pattern.)
 
-  Note: when `follow` and `nodir` are both set, then symbolic
+  Note: when `nodir` is set, then symbolic
   links to directories are also omitted.
 
 - `stat` Call `lstat()` on all entries, whether required or not
@@ -533,17 +534,6 @@ share the previously loaded cache.
   `childrenIgnored(path)` methods, then these methods will be
   called to determine whether any Path is a match or if its
   children should be traversed, respectively.
-
-- `follow` Follow symlinked directories when expanding `**`
-  patterns. This can result in a lot of duplicate references in
-  the presence of cyclic links, and make performance quite bad.
-
-  By default, a `**` in a pattern will follow 1 symbolic link if
-  it is not the first item in the pattern, or none if it is the
-  first item in the pattern, following the same behavior as Bash.
-
-  Note: when `follow` and `nodir` are both set, then symbolic
-  links to directories are also omitted.
 
 - `realpath` Set to true to call `fs.realpath` on all of the
   results. In the case of an entry that cannot be resolved, the
@@ -683,12 +673,10 @@ path separators (ie, `/` on all platforms, and `\` on Windows).
   provided. May _not_ contain `/` characters.
 - `**` If a "globstar" is alone in a path portion, then it
   matches zero or more directories and subdirectories searching
-  for matches. It does not crawl symlinked directories, unless
-  `{follow:true}` is passed in the options object. A pattern
+  for matches. A pattern
   like `a/b/**` will only match `a/b` if it is a directory.
-  Follows 1 symbolic link if not the first item in the pattern,
-  or 0 if it is the first item, unless `follow:true` is set, in
-  which case it follows all symbolic links.
+  Follows all symbolic link if not the first item in the pattern,
+  or 0 if it is the first item.
 
 `[:class:]` patterns are supported by this implementation, but
 `[=c=]` and `[.symbol.]` style class patterns are not.
@@ -736,12 +724,6 @@ the `noglobstar` flag is set. This is supported in the manner of
 bsdglob and bash 5, where `**` only has special significance if
 it is the only thing in a path part. That is, `a/**/b` will match
 `a/x/y/b`, but `a/**b` will not.
-
-Note that symlinked directories are not traversed as part of a
-`**`, though their contents may match against subsequent portions
-of the pattern. This prevents infinite loops and duplicates and
-the like. You can force glob to traverse symlinks with `**` by
-setting `{follow:true}` in the options.
 
 There is no equivalent of the `nonull` option. A pattern that
 does not find any matches simply resolves to nothing. (An empty

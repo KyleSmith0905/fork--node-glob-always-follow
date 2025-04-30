@@ -1,7 +1,7 @@
 {
-  "author": "Isaac Z. Schlueter <i@izs.me> (https://blog.izs.me/)",
-  "name": "glob",
-  "description": "the most correct and second fastest glob implementation in JavaScript",
+  "author": "Kyle Smith",
+  "name": "@kylesmith0905/glob-always-follow",
+  "description": "A fork of glob with the follow option removed and set to enable.",
   "version": "11.0.2",
   "type": "module",
   "tshy": {
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/isaacs/node-glob.git"
+    "url": "git://github.com/KyleSmith0905/fork--node-glob-always-follow.git"
   },
   "files": [
     "dist"

@@ -63,7 +63,6 @@ Object {
                              full resolved UNC maths, eg instead of 'C:\\\\foo\\\\bar', it
                              will expand to '//?/C:/foo/bar'.
     
-      -f --follow            Follow symlinked directories when expanding '**'
       -R --realpath          Call 'fs.realpath' on all of the results. In the case
                              of an entry that cannot be resolved, the entry is
                              omitted. This incurs a slight performance penalty, of

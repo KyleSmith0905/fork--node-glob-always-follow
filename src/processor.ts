@@ -94,13 +94,11 @@ export class Processor {
   matches = new MatchRecord()
   subwalks = new SubWalks()
   patterns?: Pattern[]
-  follow: boolean
   dot: boolean
   opts: GlobWalkerOpts
 
   constructor(opts: GlobWalkerOpts, hasWalkedCache?: HasWalkedCache) {
     this.opts = opts
-    this.follow = !!opts.follow
     this.dot = !!opts.dot
     this.hasWalkedCache =
       hasWalkedCache ? hasWalkedCache.copy() : new HasWalkedCache()
@@ -171,13 +169,7 @@ export class Processor {
         // if it's a symlink, but we didn't get here by way of a
         // globstar match (meaning it's the first time THIS globstar
         // has traversed a symlink), then we follow it. Otherwise, stop.
-        if (
-          !t.isSymbolicLink() ||
-          this.follow ||
-          pattern.checkFollowGlobstar()
-        ) {
-          this.subwalks.add(t, pattern)
-        }
+        this.subwalks.add(t, pattern)
         const rp = rest?.pattern()
         const rrest = rest?.rest()
         if (!rest || ((rp === '' || rp === '.') && !rrest)) {
@@ -254,15 +246,7 @@ export class Processor {
         // then this symlink consumes the globstar. If not, then we can
         // follow at most ONE symlink along the way, so we mark it, which
         // also checks to ensure that it wasn't already marked.
-        if (this.follow || !e.isSymbolicLink()) {
-          this.subwalks.add(e, pattern)
-        } else if (e.isSymbolicLink()) {
-          if (rest && pattern.checkFollowGlobstar()) {
-            this.subwalks.add(e, rest)
-          } else if (pattern.markFollowGlobstar()) {
-            this.subwalks.add(e, pattern)
-          }
-        }
+        this.subwalks.add(e, pattern)
       }
     }
     // if the NEXT thing matches this entry, then also add

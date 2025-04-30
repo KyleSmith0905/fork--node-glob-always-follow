@@ -22,7 +22,6 @@ export interface GlobWalkerOpts {
   cwd?: string | URL
   dot?: boolean
   dotRelative?: boolean
-  follow?: boolean
   ignore?: string | string[] | IgnoreLike
   mark?: boolean
   matchBase?: boolean
@@ -171,7 +170,7 @@ export abstract class GlobUtil<O extends GlobWalkerOpts = GlobWalkerOpts> {
     }
     const needStat = e.isUnknown() || this.opts.stat
     const s = needStat ? await e.lstat() : e
-    if (this.opts.follow && this.opts.nodir && s?.isSymbolicLink()) {
+    if (this.opts.nodir && s?.isSymbolicLink()) {
       const target = await s.realpath()
       /* c8 ignore start */
       if (target && (target.isUnknown() || this.opts.stat)) {
@@ -189,7 +188,6 @@ export abstract class GlobUtil<O extends GlobWalkerOpts = GlobWalkerOpts> {
           (!ifDir || e.canReaddir()) &&
           (!this.opts.nodir || !e.isDirectory()) &&
           (!this.opts.nodir ||
-            !this.opts.follow ||
             !e.isSymbolicLink() ||
             !e.realpathCached()?.isDirectory()) &&
           !this.#ignored(e)
@@ -208,7 +206,7 @@ export abstract class GlobUtil<O extends GlobWalkerOpts = GlobWalkerOpts> {
     }
     const needStat = e.isUnknown() || this.opts.stat
     const s = needStat ? e.lstatSync() : e
-    if (this.opts.follow && this.opts.nodir && s?.isSymbolicLink()) {
+    if (this.opts.nodir && s?.isSymbolicLink()) {
       const target = s.realpathSync()
       if (target && (target?.isUnknown() || this.opts.stat)) {
         target.lstatSync()

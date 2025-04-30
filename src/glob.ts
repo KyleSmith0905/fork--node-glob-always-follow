@@ -90,17 +90,6 @@ export interface GlobOptions {
   dotRelative?: boolean
 
   /**
-   * Follow symlinked directories when expanding `**`
-   * patterns. This can result in a lot of duplicate references in
-   * the presence of cyclic links, and make performance quite bad.
-   *
-   * By default, a `**` in a pattern will follow 1 symbolic link if
-   * it is not the first item in the pattern, or none if it is the
-   * first item in the pattern, following the same behavior as Bash.
-   */
-  follow?: boolean
-
-  /**
    * string or string[], or an object with `ignored` and `childrenIgnored`
    * methods.
    *
@@ -379,7 +368,6 @@ export class Glob<Opts extends GlobOptions> implements GlobOptions {
   root?: string
   dot: boolean
   dotRelative: boolean
-  follow: boolean
   ignore?: string | string[] | IgnoreLike
   magicalBraces: boolean
   mark?: boolean
@@ -428,7 +416,6 @@ export class Glob<Opts extends GlobOptions> implements GlobOptions {
     /* c8 ignore stop */
     this.withFileTypes = !!opts.withFileTypes as FileTypes<Opts>
     this.signal = opts.signal
-    this.follow = !!opts.follow
     this.dot = !!opts.dot
     this.dotRelative = !!opts.dotRelative
     this.nodir = !!opts.nodir

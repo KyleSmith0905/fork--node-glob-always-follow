@@ -83,10 +83,6 @@ const j = jack({
       `,
     },
 
-    follow: {
-      short: 'f',
-      description: `Follow symlinked directories when expanding '**'`,
-    },
     realpath: {
       short: 'R',
       description: `Call 'fs.realpath' on all of the results. In the case
@@ -250,7 +246,6 @@ try {
     cwd: values.cwd,
     dot: values.dot,
     dotRelative: values['dot-relative'],
-    follow: values.follow,
     ignore: values.ignore,
     mark: values.mark,
     matchBase: values['match-base'],
